@@ -43,4 +43,10 @@
         comment_count = comment_count + #{commentCount}
         where id = #{id}
     </update>
+    <select id="selectRelated" parameterType="com.tytao.community.model.Question" resultMap="BaseResultMap">
+        select *
+        from question
+        where id != #{id,jdbcType=BIGINT}
+        and tag regexp #{tag}
+    </select>
 </mapper>

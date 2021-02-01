@@ -2,7 +2,9 @@ package com.tytao.community.controller;
 
 import com.tytao.community.dto.CommentDTO;
 import com.tytao.community.dto.QuestionDTO;
-import com.tytao.community.mapper.QuestionMapper;
+import com.tytao.community.enums.CommentTypeEnum;
+import com.tytao.community.exception.CustomizeErrorCode;
+import com.tytao.community.exception.CustomizeException;
 import com.tytao.community.model.Question;
 import com.tytao.community.service.CommentService;
 import com.tytao.community.service.QuestionService;
@@ -22,15 +24,23 @@ public class QuestionController {
     private CommentService commentService;
 
     @GetMapping("/question/{id}")
-    public String question(@PathVariable(name = "id") Long id,
+    public String question(@PathVariable(name = "id") String id,
                            Model model){
-        QuestionDTO questionDTO = questionService.getById(id);
-        List<CommentDTO> commentDTOList =commentService.selectByQuestionId(id);
+        Long questionId = null;
+        try {
+            questionId = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new CustomizeException(CustomizeErrorCode.INVALID_INPUT);
+        }
+        QuestionDTO questionDTO = questionService.getById(questionId);
+        List<Question> relatedQuestions = questionService.selectRelated(questionDTO);
+        List<CommentDTO> commentDTOList =commentService.selectByParentId(questionId, CommentTypeEnum.QUESTION);
 
         // 累加阅读数
-        questionService.incView(id);
+        questionService.incView(questionId);
         model.addAttribute("question", questionDTO);
         model.addAttribute("comments", commentDTOList);
+        model.addAttribute("relatedQuestions", relatedQuestions);
         return "question";
     }
 }
