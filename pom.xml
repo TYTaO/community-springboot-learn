@@ -74,9 +74,12 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.11</version>
         </dependency>
-
-
-
+        <!-- 单元测试:Junit依赖 -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
