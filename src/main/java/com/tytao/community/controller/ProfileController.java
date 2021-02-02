@@ -43,7 +43,6 @@ public class ProfileController {
             model.addAttribute("section", "replies");
             model.addAttribute("sectionName", "回复我的");
             model.addAttribute("pagination", pagination);
-            model.addAttribute("unreadCount", unreadCount);
         }
         return "profile";
     }

@@ -3,6 +3,7 @@
 <head>
     <title th:text="${question.title}"></title>
     <head th:insert="~{import :: head}"></head>
+    <link rel="stylesheet" href="/css/editormd.preview.min.css" />
 </head>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
@@ -21,8 +22,19 @@
             </span>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <!--内容-->
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view" th:text="${question.description}">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view" >
+                    <textarea style="display:none;" th:utext="${question.description}"></textarea>
                 </div>
+                <script src="/js/jquery-3.4.1.min.js"></script>
+                <script src="/js/editormd.min.js"></script>
+                <script src="/js/lib/marked.min.js"></script>
+                <script src="/js/lib/prettify.min.js"></script>
+                <script type="text/javascript">
+                    $(function() {
+                        editormd.markdownToHTML("question-view", {
+                        });
+                    });
+                </script>
 
                 <!--标签-->
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

@@ -2,6 +2,7 @@ package com.tytao.community.service;
 
 import com.tytao.community.dto.PaginationDTO;
 import com.tytao.community.dto.QuestionDTO;
+import com.tytao.community.dto.QuestionQueryDTO;
 import com.tytao.community.exception.CustomizeErrorCode;
 import com.tytao.community.exception.CustomizeException;
 import com.tytao.community.mapper.QuestionExtMapper;
@@ -10,7 +11,6 @@ import com.tytao.community.mapper.UserMapper;
 import com.tytao.community.model.Question;
 import com.tytao.community.model.QuestionExample;
 import com.tytao.community.model.User;
-import com.tytao.community.model.UserExample;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
@@ -31,8 +31,17 @@ public class QuestionService {
     @Autowired
     private QuestionExtMapper questionExtMapper;
 
-    public PaginationDTO<QuestionDTO> list(Integer page, Integer size) {
-        Integer totalCount = (int)questionMapper.countByExample(new QuestionExample());
+    public PaginationDTO<QuestionDTO> list(String search, Integer page, Integer size) {
+
+        String regexSearch = null;
+        if (StringUtils.isNotBlank(search)){
+            String[] tags = StringUtils.split(search, " ");
+            // 转成正则用的表达式
+            regexSearch = Arrays.stream(tags).collect(Collectors.joining("|"));
+        }
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setSearch(regexSearch);
+        Integer totalCount = (int)questionExtMapper.countBySearch(questionQueryDTO);
         PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO();
         paginationDTO.setPagination(totalCount, page, size);
         if (page <1){
@@ -41,11 +50,11 @@ public class QuestionService {
         if (page > paginationDTO.getTotalPage()){
             page = paginationDTO.getTotalPage();
         }
-        Integer offset = size * (page - 1);
+        Integer offset = page < 1 ? 0 : size * (page - 1);
+        questionQueryDTO.setPage(offset);
+        questionQueryDTO.setSize(size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-        QuestionExample example = new QuestionExample();
-        example.setOrderByClause("gmt_create desc");
-        List<Question> questionList = questionMapper.selectByExampleWithBLOBsWithRowbounds(example, new RowBounds(offset, size));
+        List<Question> questionList = questionExtMapper.selectBySearch(questionQueryDTO);
         for (Question question : questionList) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();

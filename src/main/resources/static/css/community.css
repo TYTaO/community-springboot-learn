@@ -170,3 +170,7 @@ body {
 .red {
     color: red !important;
 }
+
+.badge{
+    background-color: #c12e2e;
+}

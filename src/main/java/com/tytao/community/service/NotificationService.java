@@ -44,6 +44,7 @@ public class NotificationService {
         }
         Integer offset = size * (page - 1);
         List<NotificationDTO> notificationDTOs = new ArrayList<>();
+        notificationExample.setOrderByClause("gmt_create desc");
         List<Notification> notificationList = notificationMapper.selectByExampleWithRowbounds(notificationExample, new RowBounds(offset, size));
         for (Notification notification : notificationList) {
             NotificationDTO notificationDTO = new NotificationDTO();
@@ -77,6 +78,9 @@ public class NotificationService {
 
     // 创建通知
     public void createNotify(Comment comment, Long receiverId, String notifierName, String outerTitle, NotificationTypeEnum replyCommentType) {
+        if (comment.getCommentator() == receiverId){
+            return;
+        }
         Notification notification = new Notification();
         // outerId需要存储问题的id
         if (comment.getType() == CommentTypeEnum.QUESTION.getType()){
