@@ -6,6 +6,7 @@ import com.tytao.community.mapper.UserMapper;
 import com.tytao.community.model.User;
 import com.tytao.community.provider.GithubProvider;
 import com.tytao.community.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Controller
+@Slf4j
 public class AuthorizeController {
 
     @Autowired
@@ -67,6 +69,7 @@ public class AuthorizeController {
             return "redirect:/";
         } else {
             // 登录失败
+            log.error("callback get github error, githubUser:{}", githubUser );
             return "redirect:/";
         }
     }
