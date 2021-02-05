@@ -1,8 +1,9 @@
 package com.tytao.community.enums;
 
 public enum NotificationTypeEnum {
-    REPLY_QUESTION(1, "回复了问题"),
-    REPLY_COMMENT(2, "回复了评论"),
+    REPLY_QUESTION(1, "回复了你的问题"),
+    REPLY_COMMENT(2, "回复了你的评论"),
+    Like_Comment(3, "点赞了你的评论")
     ;
 
     private int type;

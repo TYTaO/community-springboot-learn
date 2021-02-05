@@ -2,7 +2,6 @@ package com.tytao.community.service;
 
 import com.tytao.community.dto.CommentDTO;
 import com.tytao.community.enums.CommentTypeEnum;
-import com.tytao.community.enums.NotificationStatusEnum;
 import com.tytao.community.enums.NotificationTypeEnum;
 import com.tytao.community.exception.CustomizeErrorCode;
 import com.tytao.community.exception.CustomizeException;
@@ -57,7 +56,7 @@ public class CommentService {
             parentComment.setCommentCount(1);
             commentExtMapper.incCommentCount(parentComment);
             // 创建通知
-            notificationService.createNotify(comment, dbComment.getCommentator(),commentator.getName(), dbComment.getContent(), NotificationTypeEnum.REPLY_COMMENT);
+            notificationService.createCommentNotify(comment, dbComment.getCommentator(),commentator.getName(), dbComment.getContent(), NotificationTypeEnum.REPLY_COMMENT);
         } else {
             // 回复问题
             Question dbQuestion = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -67,7 +66,7 @@ public class CommentService {
             commentMapper.insert(comment);
             dbQuestion.setCommentCount(1);
             questionExtMapper.incCommentCount(dbQuestion);
-            notificationService.createNotify(comment, dbQuestion.getCreator(), commentator.getName(), dbQuestion.getTitle(), NotificationTypeEnum.REPLY_QUESTION);
+            notificationService.createCommentNotify(comment, dbQuestion.getCreator(), commentator.getName(), dbQuestion.getTitle(), NotificationTypeEnum.REPLY_QUESTION);
         }
 
     }

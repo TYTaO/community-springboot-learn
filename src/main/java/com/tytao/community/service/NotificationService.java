@@ -76,8 +76,8 @@ public class NotificationService {
         return notification;
     }
 
-    // 创建通知
-    public void createNotify(Comment comment, Long receiverId, String notifierName, String outerTitle, NotificationTypeEnum replyCommentType) {
+    // 创建回复通知
+    public void createCommentNotify(Comment comment, Long receiverId, String notifierName, String outerTitle, NotificationTypeEnum replyCommentType) {
         if (comment.getCommentator() == receiverId){
             return;
         }
@@ -96,6 +96,22 @@ public class NotificationService {
         notification.setType(replyCommentType.getType());
         notification.setNotifierName(notifierName);
         notification.setOuterTitle(outerTitle);
+        notificationMapper.insert(notification);
+    }
+
+    public void createLikeNotify(Thumb thumb, Long receiverId, String notifierName, String outerTitle, Long questionId){
+        if (thumb.getCreator() == receiverId){
+            return;
+        }
+        Notification notification = new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setReceiverId(receiverId);
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notification.setType(NotificationTypeEnum.Like_Comment.getType());
+        notification.setNotifierName(notifierName);
+        notification.setOuterTitle(outerTitle);
+        notification.setOuterId(questionId);
+        notification.setNotifierId(thumb.getCreator());
         notificationMapper.insert(notification);
     }
 }
