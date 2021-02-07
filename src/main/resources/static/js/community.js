@@ -7,6 +7,14 @@ function post() {
     comment2target(questionId, 1, content);
 }
 
+function likeNeedLogin(){
+    var isAccepted = confirm("点赞评论需要您登录~");
+    if (isAccepted) {
+        window.open("https://github.com/login/oauth/authorize?client_id=01895dbf8e164824fa1a&redirect_uri=" + "http://47.110.133.146" + "/callback&scope=user&state=1");
+
+    }
+}
+
 function comment2target(targetId, type, content) {
     if (!content) {
         alert("不能回复空内容~~~");
@@ -29,7 +37,7 @@ function comment2target(targetId, type, content) {
                 if (response.code == 2003) {
                     var isAccepted = confirm(response.message);
                     if (isAccepted) {
-                        window.open("https://github.com/login/oauth/authorize?client_id=2859958f9f059979ed3a&redirect_uri=" + document.location.origin + "/callback&scope=user&state=1");
+                        window.open("https://github.com/login/oauth/authorize?client_id=01895dbf8e164824fa1a&redirect_uri=" + "http://47.110.133.146" + "/callback&scope=user&state=1");
                         window.localStorage.setItem("closable", true);
                     }
                 } else {
