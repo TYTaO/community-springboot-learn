@@ -38,11 +38,12 @@ public class SessionInterceptor implements HandlerInterceptor {
                         Long unreadCount = notificationService.unreadCount(users.get(0).getId());
                         request.getSession().setAttribute("unreadCount", unreadCount);
                     }
-                    break;
+                    return true;
                 }
             }
         }
-        return true;
+        response.sendRedirect(request.getContextPath() + "/");
+        return false;
     }
 
     @Override

@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.tytao.community.dto.ResultDTO;
 import com.tytao.community.exception.CustomizeErrorCode;
 import com.tytao.community.exception.CustomizeException;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,11 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@ControllerAdvice
+@ControllerAdvice(annotations = Controller.class) // 接受Controller抛出的异常
 public class CustomizeExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
-    Object handle(Throwable e, Model model, HttpServletRequest request,
+    @ExceptionHandler(Exception.class) // 处理Exception异常，Exception
+    String handle(Throwable e, Model model, HttpServletRequest request,
                   HttpServletResponse response){
         String contentType = request.getContentType();
         ResultDTO resultDTO;
@@ -48,7 +50,7 @@ public class CustomizeExceptionHandler {
             } else {
                 model.addAttribute("message", CustomizeErrorCode.SYS_ERROR.getMessage());
             }
-            return new ModelAndView("error");
+            return "redirect:/error";
         }
     }
 }
