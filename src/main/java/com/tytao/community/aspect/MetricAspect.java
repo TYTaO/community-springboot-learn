@@ -1,6 +1,5 @@
 package com.tytao.community.aspect;
 
-import com.tytao.community.annotation.MetricTime;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,11 +10,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class MetricAspect {
     @Pointcut("execution(* com.tytao.community.service.*.*(..))")
-    public void pointcut(){
+    public void pointcut(){ }
 
-    }
-
-    @Around("pointcut()")
+    @Around("pointcut()") // 需要在切入点前后织入逻辑
     public Object metric(ProceedingJoinPoint joinPoint) throws Throwable {
         String name = joinPoint.getSignature().getDeclaringType().getSimpleName()
                 + ":" + joinPoint.getSignature().getName();

@@ -65,7 +65,7 @@ public class AuthorizeController {
             userService.createOrUpdate(user);
             response.addCookie(new Cookie("token", token));
             // 登录成功，写cookie， session
-            request.getSession().setAttribute("user", githubUser);
+            request.getSession().setAttribute("user", user);
             return "redirect:/";
         } else {
             // 登录失败

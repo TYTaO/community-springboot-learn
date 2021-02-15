@@ -4,12 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.tytao.community.dto.ResultDTO;
 import com.tytao.community.exception.CustomizeErrorCode;
 import com.tytao.community.exception.CustomizeException;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
